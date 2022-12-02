@@ -32,7 +32,7 @@
         <label for="rolesList">input role: </label>
         <select id="rolesList" name="rolesList" class="form-control mb-4 col-4"
                 multiple size="2" >
-            <option th:each="role : ${allroles}"
+            <option th:each="role : ${allRoles}"
                     th:value="${role}"
                     th:text="${role}">
             </option>

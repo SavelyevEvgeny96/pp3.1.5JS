@@ -33,7 +33,7 @@ public class AdminController {
     @GetMapping("/new")
     public String getAddNewUser(Model model) {
         model.addAttribute("user", new User());
-        model.addAttribute("allroles", roleService.getRoles());
+        model.addAttribute("allRoles", roleService.getRoles());
         return "admin/user-create";
     }
 
@@ -52,7 +52,8 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
-    public String getUpdateForm(@ModelAttribute("user") User user, @PathVariable("id") Long id, @RequestParam("rolesList") String[] selectedRoles) {
+    public String getUpdateForm(@ModelAttribute("user") User user, @PathVariable("id") Long id,
+                                @RequestParam("rolesList") String[] selectedRoles) {
         User newUser = userService.findById(id);
         userService.updateUser(user, selectedRoles);
         return "redirect:/admin";

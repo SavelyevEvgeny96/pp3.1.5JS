@@ -21,11 +21,11 @@ public class User implements UserDetails {
     private Long id;
 
 
-    @Column(name = "userName")
-    private String userName;
+    @Column(name = "username")
+    private String username;
     @Column(name = "name")
     private String name;
-    @Column(name = "surName")
+    @Column(name = "surname")
     private String surname;
     @Column(name = "email")
     private String email;
@@ -35,8 +35,8 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String userName, String name, String surname, String email, String password) {
-        this.userName = userName;
+    public User(String username, String name, String surname, String email, String password) {
+        this.username = username;
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -60,7 +60,7 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getUsername() {return userName;}
+    public String getUsername() {return username;}
 
     public String getPassword(){return password;}
 
