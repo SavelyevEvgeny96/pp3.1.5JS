@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.initadb;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -29,12 +30,16 @@ public class Initializer {
         roleRepository.save(role2);
 
 
-        User user = new User("user", "Evgeny", "Savelev", "user@mail.ru",
-                "a$12$SbrlyMjtF2vx/i1tbD0qLOdKBFbr1A5GxvI/izG4t9gBVRY1OgfeG");//password 200
-        User user2 = new User("admin", "Dgo", "Didi", "Admin@mail.ru",
-                "$2a$12$Djm7UfaK//Iw6j.NntGh3.kXlRONwNxF0Fd3DQ9pI.RS6IVqrhFpm");//password 100
+        User user = new User
+                ("user@mail.ru", "Иван", "Иванов",(byte)21,
+                        new BCryptPasswordEncoder().encode("user"));
+        User user2 = new User
+                ("admin@mail.ru", "Алексей", "Петров",(byte)33,
+                        new BCryptPasswordEncoder().encode("admin"));
+
         user.setRoles(new HashSet<>(Set.of(role2)));
         user2.setRoles(new HashSet<>(Set.of(role1)));
+
         userRepository.save(user);
         userRepository.save(user2);
     }

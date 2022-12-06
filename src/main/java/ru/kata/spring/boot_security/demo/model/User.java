@@ -2,79 +2,75 @@ package ru.kata.spring.boot_security.demo.model;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @Column(name = "username")
+    @Column(name = "email_address")
     private String username;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "surname")
-    private String surname;
-    @Column(name = "email")
-    private String email;
-    @Column(name = "password")
+
+    @Column
+    private String firstName;
+    @Column
+    private String lastName;
+    @Column
+    private Byte age;
+    @Column
     private String password;
+
+    @ManyToMany
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(String username, String name, String surname, String email, String password) {
+    public User(String username, String firstName, String lastName, Byte age, String password) {
         this.username = username;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
         this.password = password;
     }
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles;
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole().
-                        replace("[", "").replace("]", "")))
-                .collect(Collectors.toList());
+        return getRoles();
     }
 
     @Override
-    public String getUsername() {return username;}
-
-    public String getPassword(){return password;}
-
-    @Override
-    public boolean isAccountNonExpired() {return false;}
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
     @Override
-    public boolean isAccountNonLocked() {return false;}
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
     @Override
-    public boolean isCredentialsNonExpired() {return false;}
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
     @Override
-    public boolean isEnabled() {return false;}
+    public boolean isEnabled() {
+        return true;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -89,4 +85,3 @@ public class User implements UserDetails {
         return Objects.hash(getId());
     }
 }
-
