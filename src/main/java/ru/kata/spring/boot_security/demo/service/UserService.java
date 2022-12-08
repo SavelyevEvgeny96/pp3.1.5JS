@@ -9,15 +9,16 @@ public interface UserService extends UserDetailsService {
 
     User getUserById(Long id);
 
-    void addUser(User user);
-
-    void updateUserById(User user);
+    boolean addUser(User user);
 
 
     List<User> getAllUsers();
 
-    User getUserByUsername(String username);
+    User getUserByName(String username);
 
-    void deleteUserById(Long id);
+
+    boolean deleteUserById(Long id);
+
+    boolean updateUser(User user);
 }
 
