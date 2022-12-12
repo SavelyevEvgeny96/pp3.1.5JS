@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("api/")
 public class UserRestController {
@@ -21,6 +23,7 @@ public class UserRestController {
 
     @GetMapping("/user")
     public ResponseEntity<User> getInfoCurrentUser(@AuthenticationPrincipal User user) {
-        return  ResponseEntity.ok(userService.getUserByName(user.getUsername()));
+        User users= userService.getUserByName(user.getUsername());
+        return  ResponseEntity.ok().body(users);
     }
 }

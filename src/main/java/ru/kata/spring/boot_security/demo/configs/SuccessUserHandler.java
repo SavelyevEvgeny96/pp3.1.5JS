@@ -16,12 +16,14 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
 
     //метод опредеяет на какой url перекинет пользователя при входе, в заисимости от роли
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication)
-            throws IOException {
-        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        if (roles.contains("ROLE_ADMIN")) {
+    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
+                                        HttpServletResponse httpServletResponse,
+                                        Authentication authentication) throws IOException {
+
+        Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        if (authorities.contains("ROLE_ADMIN")) {
             httpServletResponse.sendRedirect("/main");
-        } else if (roles.contains("ROLE_USER")) {
+        } else if (authorities.contains("ROLE_USER")) {
             httpServletResponse.sendRedirect("/main");
         } else {
             httpServletResponse.sendRedirect("/");

@@ -9,24 +9,19 @@ import java.util.Objects;
 @Data
 @Entity
 @Table(name = "roles")
-public class Role implements GrantedAuthority {
+public class    Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private String name;
-
-    @Override
-    public String getAuthority() {
-        return getName();
-    }
+    private String authority;
 
     public Role() {
     }
 
-    public Role(String name) {
-        this.name = name;
+    public Role(String authority) {
+        this.authority = authority;
     }
 
     @Override

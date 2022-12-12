@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,15 +17,11 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-
-
     }
 
     @Override
@@ -41,34 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-
-    @Override
-    @Transactional(readOnly = true)
-    public User getUserByName(String name) {
-        return userRepository.findByUsername(name);
-    }
-
-    @Override
-    @Transactional
-    public boolean deleteUserById(Long id) {
-        if (userRepository.findById(id).isEmpty()) {
-            return false;
-        }
-        userRepository.deleteById(id);
-        return true;
-    }
-
-
-    @Override
-    @Transactional(readOnly = true)
     public User getUserById(Long id) {
         return userRepository.findById(id).get();
     }
-
 
     @Override
     @Transactional
@@ -87,6 +59,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public boolean deleteUserById(Long id) {
+        if (userRepository.findById(id).isEmpty()) {
+            return false;
+        }
+        userRepository.deleteById(id);
+        return true;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User getUserByName(String name) {
+        return userRepository.findByUsername(name);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = getUserByName(username);
         if (user == null) {
@@ -95,3 +89,4 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 }
+
