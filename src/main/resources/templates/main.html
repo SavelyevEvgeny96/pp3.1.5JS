@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" class="h-100" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +14,7 @@
 
 <header class="d-flex flex-wrap justify-content-between align-items-stretch text-white py-2 bg-dark">
   <div class="fs-3 ps-4 me-1 d-inline-block" id="headerInfo">
-      <!-- with js -->
+    <!-- with js -->
   </div>
   <div>
     <button form="logout" class="fs-5 pe-4 btn btn-dark text-white-50" type="submit">Logout</button>
@@ -24,15 +26,17 @@
   <div class="row g-0" th:with="isAdmin=${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
 
     <!--/* start left block */-->
-    <div class="col-4 nav flex-column nav-pills fs-5 py-1 my-3" id="v-pills-tab" role="tablist"
-         aria-orientation="vertical" style="width: 280px;">
-
-      <a th:if="${isAdmin}" class="nav-link active" id="v-pills-admin-tab" data-bs-toggle="pill"
-         href="main.html#v-pills-admin" role="tab"
-         aria-controls="v-pills-admin" aria-selected="false">Admin</a>
-      <a th:class="${isAdmin} ? 'nav-link' : 'nav-link active'" id="v-pills-user-tab" data-bs-toggle="pill"
-         href="#v-pills-user" role="tab"
-         aria-controls="v-pills-user" aria-selected="true">User</a>
+    <div class="col-2" style="background-color: #ffffff">
+      <div class="row justify-content">
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+          <a class="btn btn-primary btn-md" href="/admin" style="width: 100%"
+             role="button">Admin</a>
+        </div>
+        <div>
+          <a class="btn btn-primary btn-md" href="/user" style="width: 100%"
+             role="button">User</a>
+        </div>
+      </div>
     </div>
     <!--/* end left block */-->
 
