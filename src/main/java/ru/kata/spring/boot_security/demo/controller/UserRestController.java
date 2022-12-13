@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,7 +13,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("api/")
+@RequestMapping("/api")
 public class UserRestController {
 
     private final UserService userService;
@@ -21,9 +22,9 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<User> getInfoCurrentUser(@AuthenticationPrincipal User user) {
-        User users= userService.getUserByName(user.getUsername());
-        return  ResponseEntity.ok().body(users);
-    }
+//    @GetMapping("/user")
+//    public ResponseEntity<User> getInfoCurrentUser(@AuthenticationPrincipal User user) {
+//        User users= userService.getUserByName(user.getUsername());
+//        return  ResponseEntity.ok().body(users);
+//    }
 }

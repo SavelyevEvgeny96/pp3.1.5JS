@@ -6,19 +6,14 @@ import ru.kata.spring.boot_security.demo.model.User;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-
-    User getUserById(Long id);
-
-    boolean addUser(User user);
-
-
+    User getUserByName(String name);
     List<User> getAllUsers();
+    User getUserById(Long id);
+    void saveUser(User user);
+    void updateUser(User user);
+    void deleteUserById(Long id);
 
-    User getUserByName(String username);
-
-
-    boolean deleteUserById(Long id);
-
-    boolean updateUser(User user);
 }
+
+
 

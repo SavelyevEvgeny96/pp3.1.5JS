@@ -1,56 +1,61 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
+@RequiredArgsConstructor
 public class AdminRestController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
-    public AdminRestController(UserService userService) {
-        this.userService = userService;
+    private final PasswordEncoder passwordEncoder;
+
+    @GetMapping
+    public ResponseEntity<List<User>> showAllUsers(){
+        return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
-
-    @GetMapping("/main")
-    public ModelAndView getMainPage() {
-        return new ModelAndView("main");
+    @GetMapping("/{id}")
+    public ResponseEntity<User> showUneUser(@PathVariable("id") Long id) {
+        return new ResponseEntity<User>(userService.getUserById(id), HttpStatus.OK);
     }
 
-    @GetMapping("api/admin")
-    public ResponseEntity<List<User>> getInfoUsersList() {
-        List<User> userList = userService.getAllUsers();
-        return ResponseEntity.ok().body(userList); // 200
+    @PostMapping
+    public ResponseEntity<Void> createProfile(@Valid @RequestBody User user) {
+        userService.saveUser(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("api/admin/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable long id) {
-        User user = userService.getUserById(id);
-        return ResponseEntity.ok().body(user);
+    @PutMapping("/patch")
+    public ResponseEntity<Void> updateProfile(@Valid @RequestBody User user) {
+        userService.saveUser(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("api/admin")
-    public ResponseEntity<User> getSaveUserForm(@RequestBody User user) {
-        userService.addUser(user);
-        return ResponseEntity.ok().body(user);
-    }
-
-    @PutMapping("api/admin")
-    public ResponseEntity<User> getUpdateUserForm(@RequestBody User user) {
-        userService.updateUser(user);
-        return ResponseEntity.ok().body(user); // 400
-    }
-
-    @DeleteMapping("api/admin/{id}")
-    public ResponseEntity<Long> getRemoveUserForm(@PathVariable long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProfile(@PathVariable("id") Long id) {
         userService.deleteUserById(id);
-        return ResponseEntity.ok().body(id); // 404
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/roles")
+    public ResponseEntity<List<Role>> getRoles() {
+        return  ResponseEntity.ok().body(roleService.getAllRoles());
+    }
+
 }
